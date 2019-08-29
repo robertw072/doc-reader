@@ -16,7 +16,7 @@ int main()
 	
 	else cout << "Unable to open file." << endl;
 
-	int word = 1;									// first word will not be counted so its initial val is 1
+	int word = 1, sentence = 0;							// first word will not be counted so its initial val is 1
 	char ch;
 
 	while (myFile)
@@ -25,10 +25,17 @@ int main()
 	
 		if (ch == ' ' || ch == '\n')
 			word++;
+
+		if (ch == '.' || ch == ':' || ch == ';' || ch == 
+		'?' || ch == '!')
+		{
+			sentence++;
+		}
 	
 	}
 
 	cout << "Word Count: " << word << endl;
+	cout << "Sentence Count: " << sentence << endl;
 
 	myFile.close();	
 
