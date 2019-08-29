@@ -1,4 +1,4 @@
-nclude <iostream>
+#include <iostream>
 #include <fstream>
 #include <string>
 
@@ -6,20 +6,31 @@ using namespace std;
 
 int main()
 {
-	string line;
-	ifstream myFile ("/pub/pounds/CSC330/translations/KJV.txt");
+
+	ifstream myFile ("/pub/pounds/CSC330/translations/KJV.txt");			// open text file
 	
-	if (myFile.is_open())
+	if (myFile.is_open())								// check if file opened correctly
 	{
-		while (getline(myFile, line))
-		{
-			cout << line << endl;
-		}
-	myFile.close();
+		cout << "The file opened correctly." << endl;
 	}
 	
 	else cout << "Unable to open file." << endl;
 
+	int word = 1;									// first word will not be counted so its initial val is 1
+	char ch;
+
+	while (myFile)
+	{
+		myFile.get(ch);
+	
+		if (ch == ' ' || ch == '\n')
+			word++;
+	
+	}
+
+	cout << "Word Count: " << word << endl;
+
+	myFile.close();	
 
 	return 0;
 }
