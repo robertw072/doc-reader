@@ -53,7 +53,7 @@ int main()
 	
 	int word = 0;
 	int sentence = 0;
-	int syllable = word;								// syllable = word bc there is at least one syllable in each word
+	int syllable;
 
 	while (token != NULL)								// this loops counts the number of words
 	{
@@ -72,6 +72,7 @@ int main()
 			} 
 		}
 
+		syllable = word;
 		for (int n = 0; n < strlen(token); n++)					// this loop counts the syllables 
 		{ 
 			char char1 = token[n];
@@ -87,6 +88,13 @@ int main()
 	cout << "Word count: " << word << endl;	
 	cout << "Sentence count: " << sentence << endl;
 	cout << "Syllable count: " << syllable << endl;
+
+	int alpha = (syllable / word);
+	int beta = (word / sentence);
+
+	int index = 206 - (alpha * 85) - beta;
+
+	cout << "The Flesch index score is: " << index << endl;
 
 	myFile.close();	
 
