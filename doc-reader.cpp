@@ -7,6 +7,14 @@ using namespace std;
 
 bool isNumber (const char* input, int base);
 
+bool isVowel (char c)									// this function checks for vowels lul
+{
+	if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
+		return true;
+
+	return false;
+}
+
 int main()
 {
 
@@ -45,6 +53,7 @@ int main()
 	
 	int word = 0;
 	int sentence = 0;
+	int syllable = word;								// syllable = word bc there is at least one syllable in each word
 
 	while (token != NULL)								// this loops counts the number of words
 	{
@@ -63,11 +72,21 @@ int main()
 			} 
 		}
 
+		for (int n = 0; n < strlen(token); n++)					// this loop counts the syllables 
+		{ 
+			char char1 = token[n];
+			char char2 = token[n + 1];
+
+			if (isVowel(char1) && isVowel(char2))
+				syllable++; 
+		}
+
 		token = strtok(NULL, " ");
 	}
 
 	cout << "Word count: " << word << endl;	
 	cout << "Sentence count: " << sentence << endl;
+	cout << "Syllable count: " << syllable << endl;
 
 	myFile.close();	
 
