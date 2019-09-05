@@ -1,11 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <cctype>
+#include <cmath>
 #include <string>
 
 using namespace std;
-
-bool isNumber (const char* input, int base);
 
 bool isVowel (char c)									// this function checks for vowels lul
 {
@@ -13,6 +13,34 @@ bool isVowel (char c)									// this function checks for vowels lul
 		return true;
 
 	return false;
+}
+
+void checkSyllable(string token, int index, int& numSyllables)				// this function checks fo syllables and increments the count
+{
+	bool noSyllable = true;
+	bool twoVowels = false;
+
+	for (int i = 0; i <= index; i++)
+	{
+		if (isVowel(token[i]))
+		{
+			if (!twoVowels)
+			{
+				if (!((i == index) && (token[i] ==			// checks if the last character is an e
+				'e')))
+				{
+					numSyllables++;
+					noSyllable = false;
+					twoVowels = true;
+				}
+			}
+		}
+		else
+			twoVowels = false;
+	}
+	
+	if (noSyllable)
+		numSyllables++;								// every word has at least one syllable
 }
 
 int main()
@@ -27,22 +55,6 @@ int main()
 	
 	else cout << "Unable to open the file. " << endl;
 
-	/*int sentence = 0;
-        char ch;
-
-        while (myFile)                                                                  // this loop gets the sentence count
-        {
-                myFile.get(ch);
-
-                if (ch == '.' || ch == ':' || ch == ';' || ch
-                == '?' || ch == '!')
-                {
-                        sentence++;
-                }
-        }
-
-        cout << "Sentence Count: " << sentence << endl;*/
-
 	string contents((istreambuf_iterator<char>(myFile)),				// puts the file into a string
 	 istreambuf_iterator<char>());
 
@@ -53,12 +65,15 @@ int main()
 	
 	int word = 0;
 	int sentence = 0;
-	int syllable;
+	int syllable = 0;
 
 	while (token != NULL)								// this loops counts the number of words
 	{
-		//cout << token << endl;
-		word++;
+		for (int i = 0; i < strlen(token); i++)
+			tolower(token[i]);
+	
+		if (isalpha(token[0]))
+			word++;
 
 		for (int i = 0; i < strlen(token); i++)					// this loop counts the number of sentences
 		{
@@ -72,15 +87,7 @@ int main()
 			} 
 		}
 
-		syllable = word;
-		for (int n = 0; n < strlen(token); n++)					// this loop counts the syllables 
-		{ 
-			char char1 = token[n];
-			char char2 = token[n + 1];
-
-			if (isVowel(char1) && isVowel(char2))
-				syllable++; 
-		}
+		checkSyllable(token, strlen(token), syllable);
 
 		token = strtok(NULL, " ");
 	}
@@ -89,22 +96,16 @@ int main()
 	cout << "Sentence count: " << sentence << endl;
 	cout << "Syllable count: " << syllable << endl;
 
-	int alpha = (syllable / word);
-	int beta = (word / sentence);
+	double alpha = ((double)syllable / (double)word);
+	double beta = ((double)word / (double)sentence);
 
-	int index = 206 - (alpha * 85) - beta;
+	double index = (206.835 - (alpha * 84.6) - (beta * 1.015));
+	double grade = ((alpha * 11.8) + (beta * 0.39) - 15.59);
 
-	cout << "The Flesch index score is: " << index << endl;
+	cout << "The Flesch index score is: " << round(index) << endl;
+	cout << "The Flesch Kincaid Grade Level index is: " << grade << endl;
 
 	myFile.close();	
 
 	return 0;
-}
-
-bool isNumber (const char* input, int base)
-{
-	string numbase = "0123456789ABCDEF";
-	string in = input;
-
-	return (in.find_first_not_of(numbase.substr(0, base)) == string::npos);
 } 
