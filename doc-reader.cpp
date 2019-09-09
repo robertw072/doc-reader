@@ -9,8 +9,11 @@ using namespace std;
 
 bool isVowel (char c)									// this function checks for vowels lul
 {
-	if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
+	if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'
+	|| c == 'y')
+	{
 		return true;
+	}
 
 	return false;
 }
