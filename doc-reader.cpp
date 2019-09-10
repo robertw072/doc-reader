@@ -4,13 +4,37 @@
 #include <cctype>
 #include <cmath>
 #include <string>
+#include <vector>
+#include <sstream>
 
 using namespace std;
+
+bool isNumber (string token)
+{
+	stringstream ss;
+	ss << token;
+
+	string temp;
+	int found;
+	while (!ss.eof())
+	{
+		ss >> temp;
+
+		if (stringstream(temp) >> found)
+		{
+			//cout << temp << endl;
+			return true;
+		}
+
+	}
+	return false;
+}
 
 bool isVowel (char c)									// this function checks for vowels lul
 {
 	if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'
-	|| c == 'y')
+	|| c == 'y' || c == 'A' || c == 'E' || c == 'I' || c == 'O'
+	|| c == 'U' || c == 'Y')
 	{
 		return true;
 	}
@@ -18,7 +42,7 @@ bool isVowel (char c)									// this function checks for vowels lul
 	return false;
 }
 
-void checkSyllable(string token, int index, int& numSyllables)				// this function checks fo syllables and increments the count
+void checkSyllable (string token, int index, int& numSyllables)				// this function checks fo syllables and increments the count
 {
 	bool noSyllable = true;
 	bool twoVowels = false;
@@ -46,6 +70,20 @@ void checkSyllable(string token, int index, int& numSyllables)				// this functi
 		numSyllables++;								// every word has at least one syllable
 }
 
+bool checkDictionary (string token, vector<string> v)					// this function identifies if a token is in the dictionary
+{
+	bool check = false;
+	for (int p = 0; p < v.size(); p++)
+	{
+		if (token == v[p])
+		{
+			check = true;
+			break;
+		}		
+	}
+	return check;
+} 
+
 int main()
 {
 
@@ -58,6 +96,25 @@ int main()
 	
 	else cout << "Unable to open the file. " << endl;
 
+	ifstream daleChall ("/pub/pounds/CSC330/dalechall/wordlist1995.txt");		// opens Dale-Chall list
+
+	if (daleChall.is_open())
+		cout << "The Dale-Chall list opened correctly." << endl;
+
+	else cout << "Unable to open Dale-Chall list." << endl;
+
+	vector<string> dictionary;
+	string str;
+
+	while (getline(daleChall, str))							// reads each line into dictionary vector
+	{
+		if(str.size() > 0)
+			dictionary.push_back(str);
+	}
+
+	/* for (int x = 0; x < dictionary.size(); x++)
+		cout << dictionary[x] << endl; */ 
+
 	string contents((istreambuf_iterator<char>(myFile)),				// puts the file into a string
 	 istreambuf_iterator<char>());
 
@@ -69,14 +126,15 @@ int main()
 	int word = 0;
 	int sentence = 0;
 	int syllable = 0;
+	int ezWord = 0;
 
 	while (token != NULL)								// this loops counts the number of words
 	{
-		for (int i = 0; i < strlen(token); i++)
-			tolower(token[i]);
-	
-		if (isalpha(token[0]))
+		//if (!isNumber(token))
+		//{
 			word++;
+			//cout << token << endl;
+		//}
 
 		for (int i = 0; i < strlen(token); i++)					// this loop counts the number of sentences
 		{
@@ -92,12 +150,15 @@ int main()
 
 		checkSyllable(token, strlen(token), syllable);
 
+		//bool check = checkDictionary(token, dictionary);
+	
 		token = strtok(NULL, " ");
 	}
 
 	cout << "Word count: " << word << endl;	
 	cout << "Sentence count: " << sentence << endl;
 	cout << "Syllable count: " << syllable << endl;
+	cout << "Easy Word count: " << ezWord << endl;
 
 	double alpha = ((double)syllable / (double)word);
 	double beta = ((double)word / (double)sentence);
