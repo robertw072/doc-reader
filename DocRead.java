@@ -5,8 +5,12 @@ import java.util.*;
 public class DocRead
 {
 	public static void main(String[] args) throws IOException
-	{	
-		Scanner s = new Scanner(new File("/pub/pounds/CSC330/translations/KJV.txt"));
+	{
+		System.out.println("Enter the file path of the translation you'd like to use: ");
+		Scanner tranScan = new Scanner(System.in);
+		String translation = tranScan.nextLine();
+	
+		Scanner s = new Scanner(new File(translation));
 		ArrayList<String> tokens = new ArrayList<String>();
 		while (s.hasNext())
 		{
@@ -73,9 +77,9 @@ public class DocRead
 		double grade = (alpha * 11.8) + (beta * 0.39) - 15.59;
 		double readability;
 		if (gamma > 0.05)
-			readability = ((gamma * 100.0) * (0.1579 + (beta * 0.0496))) + 3.6365;
+			readability = ((gamma * 100.0) * 0.1579) + (beta * 0.0496) + 3.6365;
 		else
-			readability = ((gamma * 100.0) * (0.1579 + (beta * 0.0496)));
+			readability = ((gamma * 100.0) * 0.1579) + (beta * 0.0496);
 
 		System.out.println("The Flesch Readability index is: " + flesch);
 		System.out.println("The Flesh-Kincaid Grade Level index is: " + grade);
@@ -95,34 +99,6 @@ public class DocRead
 			return false;
 		}
 	}
-
-/*	public static int numSyllables(String token, int index)
-	{
-		int numSyllables = 0;
-		boolean noSyllable = true;
-		boolean twoVowels = false;
-
-		for (int i = 0; i < index; i++)
-		{
-			char c = token.charAt(i);
-			if (c == 'a' || c == 'e' || c == 'i' ||
-			c == 'o' || c == 'u')
-			{
-				if (!twoVowels)
-				{
-					if (!((i == index) && (c == 'e')))
-					{
-						numSyllables++;
-						noSyllable = false;
-						twoVowels = true;
-					}
-				}
-			}
-			else
-				twoVowels = false;
-		}
-		return numSyllables;
-	}*/
 
 	public static int numSyllables(String token)
 	{
