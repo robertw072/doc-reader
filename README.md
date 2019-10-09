@@ -18,3 +18,12 @@ Without the parentheses.
 This one will also take awhile.
 
 Perl:
+type: chmod u+x reader.pl
+      reader.pl (filepath)
+without parentheses
+
+Ada:
+type: gcc -c reader.adb
+      gnatmake reader.adb
+      reader
+      
