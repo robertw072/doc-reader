@@ -4,8 +4,11 @@ program reader
         integer                         :: filesize
         integer                         :: word, syllable, sentence, space, diffWord
         
-        integer                         :: n, p
+        integer                         :: n, p, f
         logical                         :: flag, dictFlag, lengthFlag
+
+        real(kind=8)                    :: alpha, beta
+        real(kind=8)                    :: flesch, grade
 
 interface
         subroutine read_file(string, filesize)
@@ -94,10 +97,10 @@ end interface
                         end if 
                 end do
 
-                if (INDEX(to_upper(dictionary), to_upper(token)) == 0) then
-                        print *, token
-                        diffWord = diffWord + 1
-                end if
+!                f = index(to_upper(dictionary), to_upper(token))
+!                if (f == 0) then
+!                        diffWord = diffWord + 1
+!                end if
                 
 !                print *, to_upper(token)
 
@@ -109,7 +112,15 @@ end interface
         print *, "The word count is: ", word
         print *, "The sentence count is: ", sentence
         print *, "The syllable count is : ", syllable
-        print *, "The difficult word count is: ", diffWord
+
+        alpha = real(syllable,8) / real(word,8)
+        beta = real(word,8) / real(sentence,8)
+
+        flesch = 206.835 - (alpha * 84.6) - (beta * 1.015)
+        grade = (alpha * 11.8) + (beta * 0.39) - 15.59
+
+        print *, "The Flesch Readability index is: ", flesch
+        print *, "The Flesh-Kincaid Grade Level is: ", grade
 
 end program reader
 
